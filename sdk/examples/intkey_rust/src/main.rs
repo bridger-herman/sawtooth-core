@@ -22,7 +22,6 @@ extern crate crypto;
 #[macro_use]
 extern crate log;
 extern crate log4rs;
-extern crate rustc_serialize;
 extern crate sawtooth_sdk;
 
 mod handler;
