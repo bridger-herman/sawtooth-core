@@ -71,6 +71,7 @@ impl ZmqDriver {
         let validator_sender_clone = validator_sender.clone();
         let (update_sender, update_receiver) = channel();
 
+        trace!("Registering");
         let (chain_head, peers) = register(
             &mut validator_sender,
             Duration::from_secs(REGISTER_TIMEOUT),
@@ -78,10 +79,12 @@ impl ZmqDriver {
             engine.version(),
         )?;
 
+        trace!("Starting driver");
         let driver_thread = thread::spawn(move || {
             driver_loop(update_sender, self.stop_receiver, validator_sender, validator_receiver)
         });
 
+        trace!("Starting engine");
         let (name, version) = { (engine.name(), engine.version()) };
         engine.start(
             update_receiver,
