@@ -316,6 +316,9 @@ class Gossip(object):
 
     def send_consensus_message(self, peer_id, message, public_key):
         connection_id = self._network.public_key_to_connection_id(peer_id)
+        if connection_id is None:
+            LOGGER.error("Tried to send to disconnected peer %s", peer_id)
+            return
 
         self.send(
             validator_pb2.Message.GOSSIP_CONSENSUS_MESSAGE,
